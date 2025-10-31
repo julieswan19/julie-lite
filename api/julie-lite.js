@@ -1,25 +1,23 @@
-// Vercel Serverless Function (no Express needed)
+// api/julie-lite.js — Vercel Serverless Function
 import OpenAI from "openai";
-
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-// tiny in-memory cache
+// in-memory cache
 const cache = {};
-const TTL = 1000 * 60 * 60 * 24; // 24h
+const TTL = 1000 * 60 * 60 * 24;
 const keyFrom = (msgs = []) =>
-  (msgs.filter(m => m.role === "user").pop()?.content || "")
-    .trim()
-    .toLowerCase();
+  (msgs.filter(m => m.role === "user").pop()?.content || "").trim().toLowerCase();
 
 export default async function handler(req, res) {
   // CORS (lock to your domain later)
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS, GET");
   if (req.method === "OPTIONS") return res.status(200).end();
-
-  if (req.method !== "POST") {
-    return res.status(200).json({ ok: true, hint: "POST JSON: { messages: [...] }" });
+  if (req.method === "GET") {
+    return res
+      .status(200)
+      .json({ ok: true, message: "POST JSON to this endpoint: { messages: [...] }" });
   }
 
   try {
