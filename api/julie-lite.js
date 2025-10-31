@@ -1,7 +1,7 @@
 // Minimal Express server with caching (from earlier)
 import OpenAI from "openai";
 import express from "express";
-import cors from "cors";
+import cors from "cors";=
 
 const app = express();
 app.use(express.json());
